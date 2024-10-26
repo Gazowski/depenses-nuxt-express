@@ -8,6 +8,8 @@ export const useCategoryStore = defineStore('category', {
         categories: [] as Category[],
         loading: false,
         error: null,
+        aggregatedData: {} as AggregatedData,
+        loadingYears: new Set<number>(),
     }),
 
     actions: {
@@ -33,70 +35,83 @@ export const useCategoryStore = defineStore('category', {
 
         },
 
-        addAmountToCategory(categoryId: string, year: string, month: string, amount: number) {
-            const category = this.categories.find(category => category.id === categoryId);
-            // round amount to 2 decimal places
-            amount = Math.round(amount * 100) / 100;
-            if (!category) {
-                console.error('Category not found:', categoryId);
-                return;
+        async getAggregatedData(year: number) {
+            if (this.aggregatedData[year] || this.loadingYears.has(year)) {
+                return; // Évite de charger les mêmes données plusieurs fois
             }
 
-            
-            if(!category.totalAmount){
-                category.totalAmount = {};
-                category.totalAmount[year] = {};
-                category.totalAmount[year][month] = amount;
-            } else {
-                if(!category.totalAmount[year]) {
-                    if(!category.totalAmount[year][month]) {
-                        category.totalAmount[year][month] = amount;
-                    } else {
-                        category.totalAmount[year][month] = (parseFloat(category.totalAmount[year][month]) || 0) + parseFloat(amount);
-                    }
-                } else {
-                    if(!category.totalAmount[year][month]) {
-                        category.totalAmount[year][month] = amount;
-                    } else {
-                        category.totalAmount[year][month] = (parseFloat(category.totalAmount[year][month]) || 0) + parseFloat(amount);
-                    }
-                }
+            this.loadingYears.add(year);
+
+            try {
+                const data = await CategoryApi().getAggregatedData(year);
+                this.aggregatedData = {...this.aggregatedData, ...data};
+            } catch (error) {
+                console.error('Erreur lors de la récupération des données agrégées:', error)
+            } finally {
+                this.loadingYears.delete(year);
             }
+        },
 
-            console.log('category.totalAmount:', category.totalAmount);
+        /**
+         * update aggregatedData for a specific month
+         * 
+         */
 
-            // add total amount to category that matches categoryId
-            this.categories = this.categories.map(category => {
-                if (category.id === categoryId) {
-                    return {
-                        ...category,
-                        totalAmount: category.totalAmount,
-                    };
-                }
-                return category;
-            });
-            
+        async updateAggregatedData(year: number) {
+            try {
+                const data = await CategoryApi().getAggregatedData(year);
+                this.aggregatedData = {...this.aggregatedData, ...data};
+            } catch (error) {
+                console.error('Erreur lors de la mise à jour des données agrégées:', error);
+            }
+        },
 
-        }
+        async initCategories() {
+            const year = new Date().getFullYear();
+            this.loading = true;
 
+            try {
+                await Promise.all([
+                    this.getAggregatedData(year),
+                    this.getAggregatedData(year - 1),
+                    this.fetchCategories(),
+                ]);
+            } catch (error) {
+                console.error('Erreur lors de l\'initialisation des catégories:', error);
+            } finally {
+                this.loading = false;
+            }
+        },
 
     },
 
     getters: {
         getCategoryById: (state) => (id: string) => {
-            return state.categories.find(category => category.id === id);
+            return state.categories.find(category => category.id === id) as Category;
         },
         getCategoriesByGroup: (state) => (groupe: string) => {
             return state.categories.filter(category => category.groupe === groupe);
         },
-        getCategoriesTotalAmountForMonth: (state) => (year: string, month: string) => {
-            return state.categories.map(category => {
-                const totalAmount = category.totalAmount.find(item => item.year === year && item.month === month);
-                return {
-                    ...category,
-                    totalAmount: totalAmount ? totalAmount.amount : 0,
-                };
-            });
-        }
+
+        getTotalsByYear: (state) => (year: number) => state.aggregatedData[year] || {},
+        // getCategoryTotalsByYear: (state) => (year: number, categoryName: string) => 
+        //   state.aggregatedData[year]?.[categoryName],
+        getCategoryGroups: (state) => (year: number) => {
+          const yearData = state.aggregatedData[year];
+          if (!yearData) return [];
+          const groups = new Set<string>();
+          Object.values(yearData).forEach(categoryData => {
+            groups.add(categoryData.group);
+          });
+          return Array.from(groups);
+        },
+        getTotalsByMonth: (state) => (year: number, month: number) => {
+            const yearData = state.aggregatedData[year];
+            if (!yearData) return {};
+            return yearData.filter(data => parseInt(data.month) === month);
+        },
+
+        isLoading: (state) => (year: number) => state.loadingYears.has(year),
     },
 });
+

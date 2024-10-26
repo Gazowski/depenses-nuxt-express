@@ -1,0 +1,39 @@
+/* fade animation */
+.fade-enter-active{
+  --fade-enter-active-delay: 0;
+  animation-name: fade;
+  animation-duration: 1.2s;
+  animation-delay: var(--fade-enter-active-delay);
+  animation-fill-mode: both;
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* slide animation */
+.slide-enter-active{
+  --slide-enter-active-delay: 0;
+  --slide-enter-active-duration: 0.3s;
+  animation-name: slide;
+  animation-duration: var(--slide-enter-active-duration);
+  animation-delay: var(--slide-enter-active-delay);
+  animation-fill-mode: both;
+  animation-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+@keyframes slide {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -3,10 +3,13 @@
 import Menu from 'primevue/menu';
 import Button from 'primevue/button';
 import { monthsList } from '~/composables/useMonth';
+import { useCategoryStore } from '~/stores/category';
 
-const sidebarVisible = ref(true);
+const sidebarVisible = ref(false);
 const currentYear = new Date().getFullYear();
 const months = monthsList;
+const categoryStore = useCategoryStore();
+const isInitialised = ref(false);
 
 const monthsMenu = computed(() => {
     const currentMonth = new Date().getMonth();
@@ -31,6 +34,13 @@ const showPastYears = () => {
     // Implémentez la logique pour afficher les années passées
     console.log('Afficher les années passées');
 };
+
+onMounted(async () => {
+
+    await categoryStore.initCategories();
+
+    isInitialised.value = true;
+})
 </script>
 
 <template>
@@ -42,14 +52,17 @@ const showPastYears = () => {
           <Button label="Années précédentes" class="p-button-secondary mt-3" @click="showPastYears" />
         </div>
       </Sidebar>
-      <div class="layout-main">
+      <div class="layout-main" v-if="isInitialised">
         <header class="layout-header">
           <Button icon="pi pi-bars" @click="toggleSidebar" />
-          <h1>Suivi financier familial</h1>
+          <h1 class="text-lg">Suivi financier familial</h1>
         </header>
         <main class="layout-content">
           <slot />
         </main>
+      </div>
+      <div v-else>
+        <p>Initialisation...</p>
       </div>
     </div>
   </template>
@@ -57,7 +70,7 @@ const showPastYears = () => {
 
   <style scoped>
   .layout-wrapper {
-    display: flex;
+    display: grid;
     min-height: 100vh;
   }
   
@@ -74,25 +87,26 @@ const showPastYears = () => {
   }
   
   .layout-main {
-    flex: 1;
-    margin-left: 250px;
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    place-items: center;
+
   }
   
   .layout-header {
-    padding: 1rem;  
-    display: flex;
-    align-items: center;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    width: 100%;
   }
   
   .layout-header h1 {
-    margin-left: 1rem;
+    text-align: center;
   }
   
   .layout-content {
     flex: 1;
     padding: 1rem;
+    max-width: calc(696px + 2 * 1rem);
   }
   
   @media (max-width: 768px) {

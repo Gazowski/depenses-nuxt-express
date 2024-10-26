@@ -40,6 +40,27 @@ export const TransactionApi = () => {
         }
     }
 
+    /**
+     * get transactions for a specific category during a specific month
+     * @param {string} category - the category of the transaction
+     * @param {number} month - the month of the transaction
+     * @param {number} year - the year of the transaction
+     * @returns a list of transactions
+     */
+    const getTransactionsForCategoryAndMonth = async (category: string, month: number, year: number): Promise<Transaction[]> => {
+        try {
+            const data = await $fetch(apiUrl + '/transactionsForCategoryAndMonth', {
+                baseURL: baseUrl,
+                params: { category, month, year },
+            });
+
+            return data as Transaction[];
+        } catch (error) {
+            console.error('Erreur lors de la récupération des transactions:', error);
+            throw error;
+        }
+    }
+
     const testApi = async () => {
         try {
             const response = await useFetch(apiUrl + '/test', {
@@ -53,9 +74,32 @@ export const TransactionApi = () => {
         }
     }
 
+    /**
+     * update category transaction
+     * @param {string} id - the id of the transaction
+     * @param {string} categoryId - the id of the category
+     * @returns {Promise<Transaction>} Promise object represents the transaction
+        */
+
+    const updateCategoryTransaction = async (id: string, categoryId: string): Promise<Transaction> => {
+        try {
+                const data = await $fetch(apiUrl + '/updateTransactionCategory', {
+                    baseURL: baseUrl,
+                    method: 'POST',
+                    body: { transactionId: id, category: categoryId },
+                });
+                return data as Transaction;
+        } catch (error) {
+            console.error('Erreur lors de la récupération des transactions:', error);
+            throw error;
+        }
+    }
+
     return {
         getTransactions,
         getTransactionsForYear,
+        getTransactionsForCategoryAndMonth,
+        updateCategoryTransaction,
         testApi,
     }
 

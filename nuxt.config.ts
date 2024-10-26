@@ -40,6 +40,8 @@ export default defineNuxtConfig({
   },
   css: [
     '/node_modules/primeflex/primeflex.css',
+    '/node_modules/primeicons/primeicons.css',
+    '~/assets/animations.css',
   ],
   plugins: [
     //require('tailwindcss-primeui')

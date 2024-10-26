@@ -15,26 +15,21 @@
         // Logique de validation du fichier si nécessaire
         console.log('Fichier sélectionné:', event.files[0].name);
         selectedFile.value = event.files[0];
-        console.log(selectedFile.value);
         const reader = new FileReader();
         reader.readAsText(new Blob([selectedFile.value]), 'UTF-8');
-        console.log(reader.result);
-                reader.onload = function(event) {
-            console.log('inside onload');
+            reader.onload = function(event) {
             console.log(event.target.result);  // This should show the CSV content with accents
         };
 
     };
     
     const handleUpload = () => {
-        console.log('Fichier téléchargé:', selectedFile.value);
         uploading.value = true;
         uploadProgress.value = 0;
         
         const formData = new FormData();
         formData.append('file', selectedFile.value);
 
-        console.log('formData:', formData);
 
         // api is https://localhost:3003/api/upload
         fetch(uploadApiUrl, {
@@ -43,7 +38,6 @@
         })
         // .then(response => response.json())
         .then(data => {
-            console.log('Success:', data);
             uploadProgress.value = 100;
             uploadMessage.value = 'Fichier téléchargé avec succès!';
             uploadStatus.value = 'success';

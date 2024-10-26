@@ -26,7 +26,6 @@ export const useComptesStore = defineStore('comptes', {
       const api = useApi()
       try {
         const nouveauCompte = await api.addCompte(compte)
-        console.log(this.comptes)
         this.comptes.push(nouveauCompte)
         this.calculerSoldeTotal()
       } catch (error) {

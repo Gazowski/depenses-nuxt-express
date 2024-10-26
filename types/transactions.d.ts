@@ -13,6 +13,7 @@ declare global {
     }      
 
     type YearTransactions = Record<number, Transaction[]>;
+    type TransactionByCategory = Record<string, Transaction[]>;
 
     interface TransactionsState {
         transactions: YearTransactions;
@@ -27,9 +28,6 @@ declare global {
       [yearMonth: string]: Transaction[];
     }
     
-    interface TransactionsByCategoryAndMonth {
-      [categoryId: number]: TransactionsByYearMonth;
-    }
 }
 
 export {};

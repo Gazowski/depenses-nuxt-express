@@ -11,10 +11,9 @@ export const CategoryApi = () => {
 
     const getCategories = async (): Promise<Category[]> => {
         try {
-            const response = await useFetch(apiUrl, {
+            const data = await $fetch(apiUrl, {
                 baseURL: baseUrl,
             });
-            const data = response.data.value; // Access the value property of the Ref object
             return data as Category[];
         } catch (error) {
             console.error('Erreur lors de la récupération des categories:', error);
@@ -32,7 +31,7 @@ export const CategoryApi = () => {
 
     const addCategory = async (category: Category): Promise<Category> => {
         try {
-            const response = await useFetch(apiUrl + '/add', {
+            const data = await $fetch(apiUrl + '/add', {
                 baseURL: baseUrl as string,
                 method: 'POST',
                 headers: {
@@ -40,7 +39,6 @@ export const CategoryApi = () => {
                 },
                 body: JSON.stringify(category)
             });
-            const data = response.data.value; // Access the value property of the Ref object
             return data as Category;
         } catch (error) {
             console.error('Erreur lors de l\'ajout d\'une catégorie:', error);
@@ -52,20 +50,34 @@ export const CategoryApi = () => {
      * add a keyword to a category
      */
 
-    const addKeywordToCategory = async (categoryId: string, keyword: string): Promise<Category> => {
+    const addKeywordToCategory = async (categoryName: string, keyword: string): Promise<Category> => {
         try {
-            const response = await useFetch(apiUrl + '/addKeyword', {
+            const data = await $fetch(apiUrl + '/addKeyword', {
                 baseURL: baseUrl as string,
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ categoryId, keyword })
+                body: { categoryName, keyword }
             });
-            const data = response.data.value; // Access the value property of the Ref object
             return data as Category;
         } catch (error) {
             console.error('Erreur lors de l\'ajout d\'un mot clé à une catégorie:', error);
+            throw error;
+        }
+    }
+
+    /**
+     * get aggregated data
+     */
+
+    const getAggregatedData = async (year: number): Promise<AggregatedData> => {
+        
+        try {
+            const data = await $fetch(apiUrl + 'getTotals', {
+                baseURL: baseUrl,
+                params: { year },
+            });
+            return data as AggregatedData;
+        } catch (error) {
+            console.error('Erreur lors de la récupération des données agrégées:', error);
             throw error;
         }
     }
@@ -74,6 +86,7 @@ export const CategoryApi = () => {
         getCategories,
         addCategory,
         addKeywordToCategory,
+        getAggregatedData
     }
 
 }
