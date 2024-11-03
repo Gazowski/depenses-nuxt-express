@@ -4,6 +4,7 @@ import Menu from 'primevue/menu';
 import Button from 'primevue/button';
 import { monthsList } from '~/composables/useMonth';
 import { useCategoryStore } from '~/stores/category';
+import Divider from 'primevue/divider';
 
 const sidebarVisible = ref(false);
 const currentYear = new Date().getFullYear();
@@ -49,20 +50,30 @@ onMounted(async () => {
         <div class="sidebar-content">
           <h3>{{ currentYear }}</h3>
           <Menu :model="monthsMenu" />
-          <Button label="Années précédentes" class="p-button-secondary mt-3" @click="showPastYears" />
+          <Button 
+            label="Années précédentes" 
+            class="p-button-secondary mt-3" 
+            @click="showPastYears" />
         </div>
+        <Divider />
+        <TransactionCSVdownload />
       </Sidebar>
       <div class="layout-main" v-if="isInitialised">
         <header class="layout-header">
-          <Button icon="pi pi-bars" @click="toggleSidebar" />
-          <h1 class="text-lg">Suivi financier familial</h1>
+          <Button 
+            icon="pi pi-bars"
+            text 
+            @click="toggleSidebar" />
+          <h1 class="text-lg"><NuxtLink to="/">{{ currentYear }}</NuxtLink></h1>
         </header>
         <main class="layout-content">
           <slot />
         </main>
       </div>
       <div v-else>
-        <p>Initialisation...</p>
+        <div class="centered">
+          <h1>Suivi Financier</h1>
+        </div>
       </div>
     </div>
   </template>
@@ -71,12 +82,12 @@ onMounted(async () => {
   <style scoped>
   .layout-wrapper {
     display: grid;
-    min-height: 100vh;
+    min-height: calc(100vh - 1rem);
   }
   
   .custom-sidebar {
     width: 250px;
-    height: 100vh;
+    height: 100%;
     position: fixed;
     left: 0;
     top: 0;
@@ -84,6 +95,8 @@ onMounted(async () => {
   
   .sidebar-content {
     padding: 1rem;
+    display: grid;
+    justify-items: center;
   }
   
   .layout-main {
@@ -104,15 +117,22 @@ onMounted(async () => {
   }
   
   .layout-content {
-    flex: 1;
+    display: grid;
     padding: 1rem;
-    max-width: calc(696px + 2 * 1rem);
+    width: calc(696px + 2rem);
+    gap: 6rem;
   }
   
   @media (max-width: 768px) {
     .layout-main {
       margin-left: 0;
     }
+  }
+
+  .centered {
+    display: grid;
+    place-items: center;
+    height: 100%;
   }
 
   </style>

@@ -108,7 +108,7 @@ export const useCategoryStore = defineStore('category', {
         getTotalsByMonth: (state) => (year: number, month: number) => {
             const yearData = state.aggregatedData[year];
             if (!yearData) return {};
-            return yearData.filter(data => parseInt(data.month) === month);
+            return yearData.filter(data => parseFloat(data.month) === month);
         },
 
         isLoading: (state) => (year: number) => state.loadingYears.has(year),

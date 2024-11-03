@@ -31,6 +31,7 @@ export default defineNuxtConfig({
   googleFonts: {
     families: {
       Montserrat: true,
+      Habibi: true,
     },
   },
   runtimeConfig: {
@@ -40,6 +41,7 @@ export default defineNuxtConfig({
   },
   css: [
     '/node_modules/primeflex/primeflex.css',
+    '/node_modules/primeflex/themes/primeone-dark.css',
     '/node_modules/primeicons/primeicons.css',
     '~/assets/animations.css',
   ],

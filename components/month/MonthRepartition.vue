@@ -18,7 +18,8 @@ onMounted(() => {
         hoverBackgroundColor: props.repartitionData.map(data => data.color),
         borderWidth: 0,
       }
-    ]
+    ],
+    labels: props.repartitionData.map(data => data.name),
   };
 
   chartOptions.value = {

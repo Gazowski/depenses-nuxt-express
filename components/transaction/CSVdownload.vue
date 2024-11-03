@@ -56,7 +56,7 @@
 
 <template>
     <div class="csv-upload">
-        <h2>Télécharger un relevé bancaire CSV</h2>
+        <h4>Ajouter un relevé CSV</h4>
         <FileUpload
             name="csvFile"
             mode="basic"
@@ -67,17 +67,30 @@
             @upload="handleUpload"
             customUpload
             chooseLabel="Choisir un fichier"
+            class="p-button-outlined"
         />
-        <Button @click="handleUpload" class="mt-2">Télécharger</button>
-        <ProgressBar v-if="uploading" :value="uploadProgress" />
-        <Message v-if="uploadMessage" :severity="uploadStatus" :closable="true">{{ uploadMessage }}</Message>
+        <Button 
+            @click="handleUpload" 
+            class="mt-2">
+            Télécharger
+        </Button>
+        <ProgressBar 
+            v-if="uploading" 
+            :value="uploadProgress" 
+        />
+        <Message 
+            v-if="uploadMessage" 
+            :severity="uploadStatus" 
+            :closable="true">
+            {{ uploadMessage }}
+        </Message>
     </div>
 </template>
   
 <style scoped>
     .csv-upload {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
+        display: grid;
+        justify-items: center;
+        gap: .5rem;
     }
 </style>

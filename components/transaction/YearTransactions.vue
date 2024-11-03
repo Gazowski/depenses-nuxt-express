@@ -1,4 +1,10 @@
 <script setup lang="ts">
+
+/**
+ * list all transactions for a given year
+ * sort transactions by category
+ */
+
     import { useTransactionsStore } from '@/stores/transactions'
     import { useCategoryStore } from '~/stores/category';
 

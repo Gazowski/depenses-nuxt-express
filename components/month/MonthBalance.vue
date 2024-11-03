@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import Chart from 'primevue/chart';
 import Card from 'primevue/card';
+import plugin from 'primevue/config';
+import { plugins } from 'chart.js';
 
 const props = defineProps<{
   totalIncome: number
@@ -9,10 +11,11 @@ const props = defineProps<{
 
 const chartData = ref();
 const chartOptions = ref();
+const balance = computed(() => props.totalIncome - props.totalExpense);
 
 onMounted(() => {
   chartData.value = {
-    labels: ['Revenu', 'Dépense'],
+    labels: [`${Math.round(props.totalIncome)} $`, `${Math.round(props.totalExpense)} $`],
     datasets: [
       {
         label: 'Revenus',
@@ -39,7 +42,12 @@ onMounted(() => {
         stacked: true
       },
       y: {
-        stacked: true
+        display: false
+      }
+    },
+    plugins: {
+      legend: {
+        display: false
       }
     }
   };
@@ -51,6 +59,7 @@ onMounted(() => {
 <template>
     <Card>
         <template #content>
+            <h4 class="text-center" :class=" balance >= 0 ? 'text-cyan-500' : 'text-red-500' ">Balance: {{ Math.round(balance) }} $</h4>
             <Chart type="bar" :data="chartData" :options="chartOptions" />
         </template>  
   </Card>

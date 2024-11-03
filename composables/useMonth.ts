@@ -17,3 +17,8 @@ export const getMonthNumber = (monthName: string) => {
     const index = monthsList.findIndex(month => month.toLowerCase() === normalizedName)
     return index !== -1 ? index + 1 : null
 }
+
+export const shortMonthsList = Array.from({ length: 12 }, (_, i) => {
+    const date = new Date(2000, i, 1)
+    return formatter.format(date).slice(0, 3)
+})

@@ -37,15 +37,15 @@
     
     // value for balance chart
     const incomeArray = categories.value.filter((data:CategoryData) => data.group === 'Revenu') as CategoryData[];
-    const totalIncome = ref(incomeArray.reduce((acc:any, data:CategoryData) => acc + parseInt(data.total), 0));
+    const totalIncome = ref(incomeArray.reduce((acc:any, data:CategoryData) => acc + parseFloat(data.total), 0));
     
     const expenseArray = categories.value.filter((data:CategoryData) => data.group === 'Dépense');
-    const totalExpense = ref(expenseArray.reduce((acc:any, data:CategoryData) => acc + parseInt(data.total), 0));
+    const totalExpense = ref(expenseArray.reduce((acc:any, data:CategoryData) => acc + parseFloat(data.total), 0));
     
     // value for repartition chart
     const repartitionData = ref(
         categories.value.filter(
-            (data:CategoryData) => ['Revenu', 'Dépense'].includes(data.group)
+            (data:CategoryData) => data.group === 'Dépense'
         )
     );
     

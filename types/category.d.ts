@@ -25,6 +25,11 @@ declare global {
         month: number;
         total: number;
     }
+
+    interface DetailedTotal {
+        month: number;
+        totals: CategoryData[] | [];
+    }
       
     // interface YearData {
     //   [categoryName: string]: CategoryData;
