@@ -41,6 +41,23 @@ export const TransactionApi = () => {
     }
 
     /**
+     * get transactions for a year from a Redis cache
+     */
+    const getCachedTransactionsForYear = async (year: number): Promise<Transaction[]> => {
+        try {
+            const data = await $fetch(apiUrl + '/cachedTransactionsForYear', {
+                baseURL: baseUrl,
+                params: { year },
+            });
+
+            return data as Transaction[];
+        } catch (error) {
+            console.error('Erreur lors de la récupération des transactions:', error);
+            throw error;
+        }
+    }
+
+    /**
      * get transactions for a specific category during a specific month
      * @param {string} category - the category of the transaction
      * @param {number} month - the month of the transaction
@@ -98,6 +115,7 @@ export const TransactionApi = () => {
     return {
         getTransactions,
         getTransactionsForYear,
+        getCachedTransactionsForYear,
         getTransactionsForCategoryAndMonth,
         updateCategoryTransaction,
         testApi,
