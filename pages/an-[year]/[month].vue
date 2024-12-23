@@ -23,7 +23,7 @@
     const getCategories = ():CategoryData[] => {
         const categoriesList = categoryStore.getTotalsByMonth(parseInt(year), monthNumber) as CategoryData[]
         // if categories list has category with name === 'unknown' put it at the beginning of the list
-        const unknownCategory = categoriesList.find((category:CategoryData) => category.name === 'unknown')
+        const unknownCategory = categoriesList.find((category:CategoryData) => category.title === 'unknown')
         if(unknownCategory) {
             const unknownIndex = categoriesList.indexOf(unknownCategory)
             categoriesList.splice(unknownIndex, 1)
@@ -53,9 +53,9 @@
     // transactions list by category
     // ------------------------------------------------------------------------------------
     
-    const unknownCategory = categories.value.find((data:CategoryData) => data.name === 'unknown') as CategoryData;
+    const unknownCategory = categories.value.find((data:CategoryData) => data.title === 'unknown') as CategoryData;
     const incomeCategories = categories.value.filter((data:CategoryData) => data.group === 'Revenu') as CategoryData[];
-    const expenseCategories = categories.value.filter((data:CategoryData) => data.group === 'Dépense' && data.name !== 'unknown') as CategoryData[];
+    const expenseCategories = categories.value.filter((data:CategoryData) => data.group === 'Dépense' && data.title !== 'unknown') as CategoryData[];
     const otherCategories = categories.value.filter((data:CategoryData) => data.group === 'Interne') as CategoryData[];
     const allCategories = ref([
         {title: 'Inconnus', categories: [unknownCategory]},
@@ -77,7 +77,7 @@
         }
 
         if(isUnknownCategorisation.value) {
-            handleEditTransaction(transactionsByCategory.value['unknown'][0])
+            handleEditTransaction(transactionsByCategory.value['Inconnu'][0])
         }
     }
 
@@ -176,9 +176,8 @@
         selectedDescriptionTransactions.value = []
         resolveMultipleTransactions.value = null
         
-        if(transactionsByCategory.value['unknown'].length > 0) {
-            // transactionsByCategory.value['unknown'].shift()
-            modalData.value = transactionsByCategory.value['unknown'][0]
+        if(transactionsByCategory.value['Inconnu'].length > 0) {
+            modalData.value = transactionsByCategory.value['Inconnu'][0]
         } else {
             isUnknownCategorisation.value = false
             openModal.value = false
@@ -272,7 +271,7 @@
             @hide="clearModal"
         >
             <p>
-                <span class="font-bold" :style="{color: modalCategory.color}">{{ modalCategory.title }}</span>
+                <span class="font-bold" :style="{color: modalCategory.color}">{{ modalCategory.name }}</span>
                 &nbsp;-&nbsp;
                 <span>{{ modalData.description }}</span>
                 &nbsp;
@@ -283,7 +282,7 @@
                     <Select 
                         v-model="modalNewCategory"
                         :options="categoryStore.categories"
-                        optionLabel="title"
+                        optionLabel="name"
                         optionValue="id" 
                         placeholder="Nouvelle catégorie"
                         class="h-8"

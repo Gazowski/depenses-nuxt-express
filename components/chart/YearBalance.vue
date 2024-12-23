@@ -66,9 +66,6 @@
                 }
         });
 
-        console.log('detailedTotals', detailedTotals);
-
-
 
         chartBalanceData.value = {
             labels: incomeTotals.value.map((data:any) => shortMonthsList[data.month - 1]),
