@@ -15,7 +15,7 @@
     "@pinia/nuxt": "^0.5.4",
     "@primevue/themes": "^4.0.7",
     "chart.js": "^4.4.4",
-    "nuxt": "^3.13.0",
+    "nuxt": "^3.14.1592",
     "pinia": "^2.2.2",
     "primeflex": "^3.3.1",
     "primeicons": "^7.0.0",
