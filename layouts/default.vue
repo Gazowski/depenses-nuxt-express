@@ -64,7 +64,7 @@ onMounted(async () => {
             icon="pi pi-bars"
             text 
             @click="toggleSidebar" />
-          <h1 class="text-lg"><NuxtLink to="/">{{ currentYear }}</NuxtLink></h1>
+          <h1 class="text-lg text-"><NuxtLink to="/">{{ currentYear }}</NuxtLink></h1>
         </header>
         <main class="layout-content">
           <slot />
@@ -100,6 +100,8 @@ onMounted(async () => {
   }
   
   .layout-main {
+    --var-icon-menu-width: 40px;
+
     display: grid;
     grid-template-rows: auto 1fr;
     place-items: center;
@@ -108,18 +110,24 @@ onMounted(async () => {
   
   .layout-header {
     display: grid;
-    grid-template-columns: auto 1fr auto;
+    grid-template-columns: var(--var-icon-menu-width) 1fr var(--var-icon-menu-width);
     width: 100%;
   }
   
   .layout-header h1 {
     text-align: center;
   }
+
+  .layout-header a {
+    text-decoration: none;
+    color: var(--p-primary-500);
+  }
   
   .layout-content {
     display: grid;
     padding: 1rem;
-    width: calc(696px + 2rem);
+    max-width: calc(696px + 2rem);
+    width: 100%;
     gap: 6rem;
   }
   
