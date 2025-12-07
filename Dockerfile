@@ -12,10 +12,8 @@ RUN npm install
 
 # Copier les fichiers et dossiers du projet dans le répertoire de travail du conteneur
 COPY . .
-
 # Construire l'application pour la production
 RUN npm run build
-
 # Exposer le port sur lequel l'application va s'exécuter
 EXPOSE 3000
 

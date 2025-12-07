@@ -1,7 +1,6 @@
 <!-- components/FinancialOverview.vue -->
 <script setup lang="ts">
     import Chart from 'primevue/chart';
-import CSVdownload from './transaction/CSVdownload.vue';
     
     const currentYear = new Date().getFullYear();
     const totalGain = ref(0);
