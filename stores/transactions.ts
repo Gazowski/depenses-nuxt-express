@@ -29,7 +29,7 @@ export const useTransactionsStore = defineStore('transactions', {
 
         async fetchTransactionsForYear(year: number): Promise<Transaction[]> {
             return new Promise(async (resolve) => {
-                const transactions = await TransactionApi().getTransactionsForYear(year)
+                const transactions = await TransactionApi().getCachedTransactionsForYear(year)
                 resolve(transactions)
             })
         },

@@ -1,0 +1,36 @@
+# Utiliser une image Node.js officielle comme image de base
+FROM node:20
+
+# Définir le répertoire de travail dans le conteneur
+WORKDIR /app
+
+# Copier les fichiers package.json et package-lock.json
+COPY package*.json ./
+
+# Installer les dépendances du projet
+RUN npm install
+
+
+
+# Préparer Nuxt
+# RUN npx run prepare
+
+# Copier tous les fichiers du projet
+COPY . .
+
+
+# Préparer Nuxt
+RUN npx run postinstall
+
+# Définir le PATH pour inclure les binaires npm
+ENV PATH=/app/node_modules/.bin:$PATH
+
+
+# Ajouter les permissions d'exécution pour nodemon
+RUN chmod +x /app/node_modules/.bin/nuxt
+
+# Exposer le port
+EXPOSE 3000
+
+# Définir la commande pour démarrer l'application
+CMD [ "npm", "run", "dev" ]

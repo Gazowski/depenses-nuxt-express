@@ -1,6 +1,5 @@
 <!-- pages/index.vue -->
 <template>
-    <FinancialOverview />
     <ChartYearBalance />
 </template>
 

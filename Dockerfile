@@ -1,21 +1,19 @@
-# Utiliser une image Node.js officielle comme image de base
-FROM node:20
+FROM node:20-alpine AS builder
 
-# Définir le répertoire de travail dans le conteneur
 WORKDIR /app
-
-# Copier les fichiers package.json et package-lock.json (si disponible)
 COPY package*.json ./
+RUN npm ci
 
-# Installer les dépendances du projet
-RUN npm install
-
-# Copier les fichiers et dossiers du projet dans le répertoire de travail du conteneur
 COPY . .
-# Construire l'application pour la production
 RUN npm run build
-# Exposer le port sur lequel l'application va s'exécuter
+
+FROM node:20-alpine
+
+WORKDIR /app
+COPY --from=builder /app/.output ./.output
+
+ENV NODE_ENV=production
+ENV HOST=0.0.0.0
 EXPOSE 3000
 
-# Définir la commande pour démarrer l'application
-CMD [ "npm", "run", "dev" ]
+CMD ["node", ".output/server/index.mjs"]

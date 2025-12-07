@@ -34,9 +34,6 @@
         <div v-if="transactionsStore.isLoading">Chargement...</div>
       
         <div v-else>
-            <!-- <div v-for="transaction in transactionsStore.getTransactionsForYear(transactionsStore.selectedYear)" :key="transaction.transactionDate.toString()">
-                {{ transaction.transactionDate }} - {{ transaction.description }}: {{ transaction.amount }}$
-            </div> -->
             <!-- sort transactions of the selected year by category -->
             <div v-for="category in categoryStore.categories" :key="category.id">
                 <h2>{{ category.name }}</h2>

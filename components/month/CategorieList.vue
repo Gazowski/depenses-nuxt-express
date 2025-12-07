@@ -28,9 +28,9 @@
         <AccordionPanel         
             v-for="(category, index) in categories" 
             :key="category.name" 
-            :value="category.title"
+            :value="category.name"
             class="slide-enter-active"
-            :class="category.name === 'unknown' ? 'p-accordionpanel--unknow': false"
+            :class="category.title === 'unknown' ? 'p-accordionpanel--unknow': false"
             :style="{
                 '--slide-enter-active-delay': .1 * index + 's',
                 '--slide-enter-active-duration': .3 + .2 * index + 's'
@@ -39,9 +39,9 @@
         >
             <AccordionHeader >
                 <div class="flex flex-1 justify-content-between gap-8">
-                <div class="flex gap-3 align-items-center"><span class="pi pi-circle-fill" :style='{color: category.color, "font-size": ".75rem"}'></span> {{ category.title }}</div>
+                <div class="flex gap-3 align-items-center"><span class="pi pi-circle-fill" :style='{color: category.color, "font-size": ".75rem"}'></span> {{ category.name }}</div>
                 <div class="flex gap-4 align-items-center">
-                    <div v-if="category.name === 'unknown'">
+                    <div v-if="category.title === 'unknown'">
                         <Button 
                             label="Catégoriser"
                             outlined
